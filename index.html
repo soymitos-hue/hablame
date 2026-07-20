@@ -27,7 +27,7 @@
             font-family: system-ui, -apple-system, sans-serif; 
             background-color: var(--bg-main); 
             color: var(--text-main); 
-            padding: 12px; 
+            padding: 8px 12px; 
             display: flex; 
             flex-direction: column; 
             height: 100vh; 
@@ -38,17 +38,17 @@
         #phrase-container { 
             background: var(--bg-card); 
             border: 2px solid var(--border); 
-            border-radius: 16px; 
-            padding: 12px; 
-            margin-bottom: 12px; 
+            border-radius: 12px; 
+            padding: 8px 12px; 
+            margin-bottom: 8px; 
             display: flex; 
             flex-direction: column; 
-            gap: 10px; 
+            gap: 6px; 
             flex-shrink: 0;
         }
         
         .section-title { 
-            font-size: 1.1rem; 
+            font-size: 0.95rem; 
             font-weight: bold; 
             text-transform: uppercase; 
             text-align: center; 
@@ -59,19 +59,21 @@
         #visual-phrase { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 8px; 
-            min-height: 100px; 
+            gap: 6px; 
+            min-height: 75px; 
+            max-height: 85px;
+            overflow-y: auto;
             align-content: flex-start; 
-            padding: 4px; 
+            padding: 2px; 
         }
         
         /* Pictogramas dentro de la frase construida */
         .phrase-picto { 
             background: white; 
             border: 2px solid var(--border); 
-            border-radius: 12px; 
-            padding: 6px; 
-            width: 85px; 
+            border-radius: 10px; 
+            padding: 4px; 
+            width: 75px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -80,15 +82,15 @@
         
         .phrase-picto .remove-btn { 
             position: absolute; 
-            top: -5px; 
-            right: -5px; 
+            top: -4px; 
+            right: -4px; 
             background: #94a3b8; 
             color: white; 
             border: none; 
             border-radius: 50%; 
-            width: 18px; 
-            height: 18px; 
-            font-size: 10px; 
+            width: 16px; 
+            height: 16px; 
+            font-size: 9px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -96,9 +98,9 @@
         }
         
         .phrase-picto img, .phrase-picto span.picto-render { 
-            width: 45px; 
-            height: 45px; 
-            font-size: 2.2rem; 
+            width: 35px; 
+            height: 35px; 
+            font-size: 1.8rem; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -106,42 +108,42 @@
         }
         
         .phrase-picto .phrase-text { 
-            font-size: 0.75rem; 
+            font-size: 0.7rem; 
             font-weight: bold; 
             text-transform: uppercase; 
-            margin-top: 4px; 
+            margin-top: 2px; 
         }
 
         #text-phrase { 
-            font-size: 1.5rem; 
+            font-size: 1.2rem; 
             font-weight: 600; 
             text-align: center; 
-            padding: 8px 0; 
+            padding: 4px 0; 
             border-top: 1px solid #e2e8f0; 
             color: #334155; 
         }
 
-        /* Botonera de Acciones Principal */
+        /* Botonera de Acciones Principal - Altura y padding ajustados para verse completos */
         #controls { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
-            gap: 10px; 
-            margin-bottom: 12px; 
+            gap: 8px; 
+            margin-bottom: 8px; 
             flex-shrink: 0;
         }
         
         .btn { 
             border: none; 
-            border-radius: 12px; 
+            border-radius: 10px; 
             color: white; 
             font-weight: bold; 
-            font-size: 1.05rem; 
-            padding: 14px; 
+            font-size: 0.95rem; 
+            padding: 10px 6px; 
             cursor: pointer; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            gap: 6px; 
+            gap: 4px; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
             text-transform: uppercase; 
         }
@@ -156,9 +158,9 @@
         #middle-panels { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-            margin-bottom: 12px; 
-            height: 140px; 
+            gap: 8px; 
+            margin-bottom: 8px; 
+            height: 110px; 
             flex-shrink: 0;
         }
         
@@ -169,10 +171,11 @@
             padding: 8px; 
             display: flex; 
             flex-direction: column; 
+            overflow: hidden;
         }
         
         .mid-panel-title { 
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             font-weight: bold; 
             text-transform: uppercase; 
             margin-bottom: 6px; 
@@ -180,21 +183,31 @@
             display: flex; 
             align-items: center; 
             gap: 4px; 
+            flex-shrink: 0;
         }
         
+        /* Modificado para desplazamiento horizontal fluido idéntico a categorías */
         .mid-panel-content { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
+            display: flex; 
+            flex-wrap: nowrap; 
             gap: 6px; 
-            overflow-y: auto; 
+            overflow-x: auto; 
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
             flex-grow: 1; 
+            align-items: center;
+            padding-bottom: 4px;
+        }
+
+        .mid-panel-content::-webkit-scrollbar {
+            display: none;
         }
         
         .quick-phrase-btn { 
             background: white; 
             border: 1px solid var(--border); 
             border-radius: 8px; 
-            padding: 6px; 
+            padding: 6px 10px; 
             display: flex; 
             align-items: center; 
             gap: 6px; 
@@ -202,24 +215,33 @@
             text-align: left; 
             font-size: 0.8rem; 
             font-weight: 500; 
+            flex-shrink: 0;
+            white-space: nowrap;
+            height: 100%;
         }
 
         /* Categorías siempre visibles usando Flex-Wrap */
         #subcategories-panel { 
             display: flex; 
-            flex-wrap: wrap; 
+            flex-wrap: nowrap; 
             gap: 6px; 
             background: #e2e8f0; 
             padding: 6px; 
             border-top-left-radius: 12px; 
             border-top-right-radius: 12px; 
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
+        }
+
+        #subcategories-panel::-webkit-scrollbar {
+            display: none;
         }
         
         .sub-tab { 
             background: #f1f5f9; 
             border: 1px solid var(--border); 
-            padding: 8px 10px; 
+            padding: 6px 12px; 
             border-radius: 8px; 
             font-weight: bold; 
             font-size: 0.78rem; 
@@ -229,10 +251,9 @@
             align-items: center; 
             justify-content: center; 
             gap: 4px; 
-            flex-grow: 1; 
+            flex-shrink: 0; 
             text-align: center; 
             color: #64748b; 
-            min-width: 100px; 
         }
         
         .sub-tab.active { 
@@ -250,7 +271,7 @@
             overflow: hidden; 
             background: #f1f5f9; 
             border-radius: 14px; 
-            min-height: 0; /* Vital para permitir contracción correcta en flexbox */
+            min-height: 0; 
         }
         
         #content-grid { 
@@ -298,9 +319,9 @@
         }
         
         .picto-img { 
-            width: 55px; 
-            height: 55px; 
-            font-size: 2.5rem; 
+            width: 50px; 
+            height: 50px; 
+            font-size: 2.2rem; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -309,7 +330,7 @@
         }
         
         .picto-text { 
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             font-weight: bold; 
             text-transform: uppercase; 
             color: #1e293b; 
@@ -321,22 +342,22 @@
         .picto-object { border: 2px solid #3b82f6; background-color: #eff6ff; }
         .picto-intention { border: 2px solid #eab308; background-color: #fefce8; }
 
-        /* Barra de Navegación Inferior Estática al Fondo (Corrección Visual del Layout Móvil) */
+        /* Barra de Navegación Inferior Estática al Fondo */
         #navigation-panel { 
             display: grid; 
             grid-template-columns: repeat(5, 1fr); 
             background: var(--primary); 
             padding: 6px; 
-            margin-top: 10px; 
+            margin-top: 8px; 
             border-radius: 14px; 
-            flex-shrink: 0; /* Evita que la barra inferior sea aplastada o se oculte */
+            flex-shrink: 0; 
         }
         
         .nav-btn { 
             background: transparent; 
             border: none; 
             color: #cbd5e1; 
-            padding: 8px; 
+            padding: 6px; 
             text-align: center; 
             cursor: pointer; 
             display: flex; 
@@ -353,7 +374,7 @@
         }
         
         .nav-btn .nav-text { 
-            font-size: 0.8rem; 
+            font-size: 0.75rem; 
             font-weight: 500; 
         }
 
@@ -414,7 +435,6 @@
         <button class="btn btn-speak" id="cmd-speak">🔊 Hablar</button>
         <button class="btn btn-clear" id="cmd-clear">🗑 Borrar</button>
         <button class="btn btn-repeat" id="cmd-repeat">🔁 Repetir</button>
-        <!-- Vinculado correctamente al motor de oraciones -->
         <button class="btn btn-save" id="cmd-save-phrase" onclick="window.sentenceEngine.saveCurrentPhrase()">⭐ Guardar</button>
     </div>
 
@@ -426,20 +446,16 @@
         </div>
         <div class="mid-panel">
             <div class="mid-panel-title">⭐ Mis Frases</div>
-            <!-- Optimizado en columna vertical flexible para alojar oraciones completas -->
             <div id="saved-phrases-list" style="display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex-grow: 1;"></div>
         </div>
     </div>
 
     <!-- Cuadrícula e Interfaz de Vistas -->
     <div id="main-layout">
-        <!-- Subcategorías estables -->
         <div id="subcategories-panel"></div>
         
-        <!-- VISTA DE TABLERO (Por defecto) -->
         <div id="content-grid"></div>
 
-        <!-- Vista de información institucional -->
         <div id="info-view">
             <h3 style="color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--primary); padding-bottom: 6px;">Información del Proyecto</h3>
             <p style="margin-bottom: 10px; font-size: 1.05rem; color: #0f172a;">
@@ -516,12 +532,12 @@
         </div>
     </div>
 
-    <!-- ORDEN DE SCRIPTS AJUSTADO CORRECTAMENTE PARA EL CORE DESACOPLADO -->
+    <!-- ORDEN DE SCRIPTS -->
     <script src="core/storage.js"></script>
     <script src="core/speech-engine.js"></script>
     <script src="core/sentence-engine.js"></script>
     <script src="core/module-loader.js"></script>
-    <script src="core/modules-tab.js"></script> <!-- Componente de la pestaña Módulos -->
+    <script src="core/modules-tab.js"></script>
     <script src="core/app.js"></script>
 </body>
 </html>
