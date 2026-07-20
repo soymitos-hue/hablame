@@ -1,0 +1,13 @@
+{
+  "id": "emotions",
+  "words": [
+    { "text": "feliz", "image": "😊", "category": "emotions", "type": "action" },
+    { "text": "triste", "image": "😢", "category": "emotions", "type": "action" },
+    { "text": "enojado", "image": "😠", "category": "emotions", "type": "action" },
+    { "text": "asustado", "image": "😨", "category": "emotions", "type": "action" },
+    { "text": "cansado", "image": "🥱", "category": "emotions", "type": "action" },
+    { "text": "enfermo", "image": "🤢", "category": "emotions", "type": "action" },
+    { "text": "bien", "image": "🙂", "category": "emotions", "type": "person" },
+    { "text": "mal", "image": "🙁", "category": "emotions", "type": "person" }
+  ]
+}

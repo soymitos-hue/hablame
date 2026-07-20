@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Háblame</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7c3aed">
+    <style>
+        :root {
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --btn-speak: #22c55e;
+            --btn-clear: #ef4444;
+            --btn-repeat: #3b82f6;
+            --btn-save: #eab308;
+            --border: #cbd5e1;
+            --font-size-base: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 12px; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        /* Contenedor Superior: MI FRASE */
+        #phrase-container { background: var(--bg-card); border: 2px solid var(--border); border-radius: 16px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .section-title { font-size: 1.1rem; font-weight: bold; text-transform: uppercase; text-align: center; letter-spacing: 0.05em; color: #0f172a; }
+        
+        #visual-phrase { display: flex; flex-wrap: wrap; gap: 8px; min-height: 100px; align-content: flex-start; padding: 4px; }
+        
+        /* Pictogramas dentro de la frase construida */
+        .phrase-picto { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 6px; width: 85px; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .phrase-picto .remove-btn { position: absolute; top: -5px; right: -5px; background: #94a3b8; color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .phrase-picto img, .phrase-picto span.picto-render { width: 45px; height: 45px; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; object-fit: contain; }
+        .phrase-picto .phrase-text { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-top: 4px; }
+
+        #text-phrase { font-size: 1.5rem; font-weight: 600; text-align: center; padding: 8px 0; border-top: 1px solid #e2e8f0; color: #334155; }
+
+        /* Botonera de Acciones Principal */
+        #controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+        .btn { border: none; border-radius: 12px; color: white; font-weight: bold; font-size: 1.05rem; padding: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-transform: uppercase; }
+        .btn-speak { background-color: var(--btn-speak); }
+        .btn-clear { background-color: var(--btn-clear); }
+        .btn-repeat { background-color: var(--btn-repeat); }
+        .btn-save { background-color: var(--btn-save); }
+        .btn:active { transform: scale(0.97); }
+
+        /* Paneles Intermedios */
+        #middle-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; height: 140px; }
+        .mid-panel { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px; display: flex; flex-direction: column; }
+        .mid-panel-title { font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; color: #64748b; display: flex; align-items: center; gap: 4px; }
+        .mid-panel-content { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; overflow-y: auto; flex-grow: 1; }
+        
+        .quick-phrase-btn { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; text-align: left; font-size: 0.8rem; font-weight: 500; }
+
+        /* Categorías siempre visibles usando Flex-Wrap */
+        #subcategories-panel { display: flex; flex-wrap: wrap; gap: 6px; background: #e2e8f0; padding: 6px; border-top-left-radius: 12px; border-top-right-radius: 12px; }
+        .sub-tab { background: #f1f5f9; border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; font-weight: bold; font-size: 0.78rem; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; flex-grow: 1; text-align: center; color: #64748b; min-width: 100px; }
+        .sub-tab.active { background: white; color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        /* Espacio de la Rejilla / Contenedores Alternos */
+        #main-layout { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; background: #f1f5f9; border-radius: 14px; }
+        #content-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; overflow-y: auto; flex-grow: 1; padding: 10px; background: white; border: 1px solid var(--border); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+
+        /* Estilo de la Sección de Información */
+        #info-view { display: none; background: white; padding: 20px; border: 1px solid var(--border); border-radius: 12px; overflow-y: auto; flex-grow: 1; line-height: 1.6; }
+
+        /* Tarjetas de Pictogramas */
+        .picto-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; }
+        .picto-card:active { transform: scale(0.95); background-color: #f8fafc; }
+        .picto-img { width: 55px; height: 55px; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; object-fit: contain; margin-bottom: 4px; }
+        .picto-text { font-size: 0.85rem; font-weight: bold; text-transform: uppercase; color: #1e293b; }
+
+        /* Colores de bordes funcionales */
+        .picto-person { border: 2px solid #22c55e; background-color: #f0fdf4; }
+        .picto-action { border: 2px solid #ef4444; background-color: #fef2f2; }
+        .picto-object { border: 2px solid #3b82f6; background-color: #eff6ff; }
+        .picto-intention { border: 2px solid #eab308; background-color: #fefce8; }
+
+        /* Barra de Navegación Inferior */
+        #navigation-panel { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--primary); padding: 6px; margin-top: 10px; border-radius: 14px; }
+        .nav-btn { background: transparent; border: none; color: #cbd5e1; padding: 8px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+        .nav-btn.active { color: white; background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .nav-btn .nav-text { font-size: 0.8rem; font-weight: 500; }
+
+        /* Modal de configuración */
+        #config-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 16px; width: 90%; max-width: 450px; }
+        .modal-row { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .modal-row label { font-weight: bold; font-size: 0.85rem; }
+        .modal-row select, .modal-row input { padding: 8px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.95rem; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <!-- Panel Superior -->
+    <div id="phrase-container">
+        <div class="section-title">Mi Frase</div>
+        <div id="visual-phrase"></div>
+        <div id="text-phrase"></div>
+    </div>
+
+    <!-- Botonera -->
+    <div id="controls">
+        <button class="btn btn-speak" id="cmd-speak">🔊 Hablar</button>
+        <button class="btn btn-clear" id="cmd-clear">🗑 Borrar</button>
+        <button class="btn btn-repeat" id="cmd-repeat">🔁 Repetir</button>
+        <!-- Vinculado correctamente al motor de oraciones -->
+        <button class="btn btn-save" id="cmd-save-phrase" onclick="window.sentenceEngine.saveCurrentPhrase()">⭐ Guardar</button>
+    </div>
+
+    <!-- Paneles Intermedios -->
+    <div id="middle-panels">
+        <div class="mid-panel">
+            <div class="mid-panel-title">⚡ Frases Rápidas</div>
+            <div class="mid-panel-content" id="quick-phrases-grid"></div>
+        </div>
+        <div class="mid-panel">
+            <div class="mid-panel-title">⭐ Mis Frases</div>
+            <!-- Optimizado en columna vertical flexible para alojar oraciones completas -->
+            <div id="saved-phrases-list" style="display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex-grow: 1;"></div>
+        </div>
+    </div>
+
+    <!-- Cuadrícula e Interfaz de Vistas -->
+    <div id="main-layout">
+        <!-- Subcategorías estables -->
+        <div id="subcategories-panel"></div>
+        
+        <!-- VISTA DE TABLERO (Por defecto) -->
+        <div id="content-grid"></div>
+
+        <!-- Vista de información institucional -->
+        <div id="info-view">
+            <h3 style="color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid var(--primary); padding-bottom: 6px;">Información del Proyecto</h3>
+            <p style="margin-bottom: 10px; font-size: 1.05rem; color: #0f172a;">
+                <strong>Recurso Educativo Digital Abierto</strong> generado por:
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 15px; color: #334155;">
+                <li><strong>Autor:</strong> Hamilton Cabrera</li>
+                <li><strong>Institución:</strong> Centro de Innovación y Experimentación de Tecnología Educativa (CIETE)</li>
+                <li><strong>Ubicación:</strong> Quito, Ecuador, 2026</li>
+            </ul>
+            <p style="margin-bottom: 15px; background: #f8fafc; padding: 12px; border-left: 4px solid var(--primary); border-radius: 4px; font-style: italic; color: #475569;">
+                Con el apoyo, co-diseño y asistencia técnica en ingeniería de software de <strong>Gemini (Tu colaborador IA de Google)</strong>, garantizando un entorno ligero, offline y de alto desempeño pedagógico.
+            </p>
+            <p style="font-weight: bold; color: #0f172a;">
+                📧 Contacto: <a href="mailto:hamilton.cabrera@educacion.gob.ec" style="color: var(--primary); text-decoration: underline;">hamilton.cabrera@educacion.gob.ec</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Barra de Navegación Inferior -->
+    <div id="navigation-panel"></div>
+
+    <!-- Modal de Configuración -->
+    <div id="config-modal">
+        <div class="modal-content" style="max-height: 85vh; overflow-y: auto;">
+            <h3 style="margin-bottom: 15px; border-bottom: 2px solid var(--primary); padding-bottom: 5px;">Ajustes del Sistema</h3>
+            <div class="modal-row">
+                <label>Voz de Síntesis:</label>
+                <select id="cfg-voice"></select>
+            </div>
+            <div class="modal-row">
+                <label>Velocidad:</label>
+                <input type="range" id="cfg-rate" min="0.5" max="1.5" step="0.1" value="1">
+            </div>
+            
+            <hr style="margin: 15px 0; border: 0; border-top: 1px dashed var(--border);">
+            <h4 style="color: var(--primary); margin-bottom: 10px;">✨ Añadir Pictograma Personalizado</h4>
+            <div class="modal-row">
+                <label>Palabra o Texto:</label>
+                <input type="text" id="new-word-text" placeholder="Ej: Galleta">
+            </div>
+            <div class="modal-row">
+                <label>Opción A: Escribe un Emoji:</label>
+                <input type="text" id="new-word-emoji" placeholder="Ej: 🍪">
+            </div>
+            <div class="modal-row">
+                <label>Opción B: O sube una Imagen:</label>
+                <input type="file" id="new-word-img" accept="image/*">
+            </div>
+            <div class="modal-row">
+                <label>Subcategoría Destino:</label>
+                <select id="new-word-cat">
+                    <option value="basic">Básico</option>
+                    <option value="people">Personas</option>
+                    <option value="food">Comida</option>
+                    <option value="drinks">Bebidas</option>
+                    <option value="actions">Acciones</option>
+                    <option value="emotions">Emociones</option>
+                    <option value="places">Lugares</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Tipo de Borde (Función):</label>
+                <select id="new-word-type">
+                    <option value="person">Persona (Verde)</option>
+                    <option value="action">Acción (Rojo)</option>
+                    <option value="object">Objeto / Alimento (Azul)</option>
+                    <option value="intention">Deseo / Sentimiento (Amarillo)</option>
+                </select>
+            </div>
+            
+            <button id="cmd-save-custom-word" style="background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; margin-bottom: 10px;">💾 Guardar Pictograma</button>
+            <button class="close-modal" id="cfg-close" style="background: #64748b; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer;">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- ORDEN DE SCRIPTS AJUSTADO CORRECTAMENTE PARA EL CORE DESACOPLADO -->
+    <script src="core/storage.js"></script>
+    <script src="core/speech-engine.js"></script>
+    <script src="core/sentence-engine.js"></script>
+    <script src="core/module-loader.js"></script>
+    <script src="core/modules-tab.js"></script> <!-- Componente de la pestaña Módulos -->
+    <script src="core/app.js"></script>
+</body>
+</html>

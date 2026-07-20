@@ -1,0 +1,18 @@
+{
+  "name": "Comunicador CAA Progresivo",
+  "short_name": "CAA Movil",
+  "description": "Aplicación web de comunicación alternativa y aumentativa",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme-color": "#0284c7",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3220/3220579.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

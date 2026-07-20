@@ -1,0 +1,13 @@
+{
+  "id": "food",
+  "words": [
+    { "text": "agua", "image": "🥛", "category": "food", "type": "object" },
+    { "text": "pan", "image": "🍞", "category": "food", "type": "object" },
+    { "text": "arroz", "image": "🍚", "category": "food", "type": "object" },
+    { "text": "sopa", "image": "🍲", "category": "food", "type": "object" },
+    { "text": "manzana", "image": "🍎", "category": "food", "type": "object" },
+    { "text": "sandía", "image": "🍉", "category": "food", "type": "object" },
+    { "text": "jugo", "image": "🧃", "category": "food", "type": "object" },
+    { "text": "leche", "image": "🥛", "category": "food", "type": "object" }
+  ]
+}

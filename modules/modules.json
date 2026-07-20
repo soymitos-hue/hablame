@@ -1,0 +1,23 @@
+[
+  {
+    "id": "basic",
+    "name": "Comunicación Básica",
+    "icon": "💬",
+    "description": "Personas, acciones e intenciones comunes",
+    "entry": "module.json"
+  },
+  {
+    "id": "food",
+    "name": "Comida",
+    "icon": "🍉",
+    "description": "Alimentos y bebidas",
+    "entry": "module.json"
+  },
+  {
+    "id": "emotions",
+    "name": "Emociones",
+    "icon": "🎭",
+    "description": "Estados de ánimo y salud",
+    "entry": "module.json"
+  }
+]
